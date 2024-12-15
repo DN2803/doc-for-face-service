@@ -1,0 +1,1553 @@
+<!doctype html>
+<html>
+  <head>
+    <title>OpenCV Face Recognition</title>
+    <style type="text/css">
+      body {
+      	font-family: Trebuchet MS, sans-serif;
+      	font-size: 15px;
+      	color: #444;
+      	margin-right: 24px;
+      }
+      
+      h1	{
+      	font-size: 25px;
+      }
+      h2	{
+      	font-size: 20px;
+      }
+      h3	{
+      	font-size: 16px;
+      	font-weight: bold;
+      }
+      hr	{
+      	height: 1px;
+      	border: 0;
+      	color: #ddd;
+      	background-color: #ddd;
+      }
+      
+      .app-desc {
+        clear: both;
+        margin-left: 20px;
+      }
+      .param-name {
+        width: 100%;
+      }
+      .license-info {
+        margin-left: 20px;
+      }
+      
+      .license-url {
+        margin-left: 20px;
+      }
+      
+      .model {
+        margin: 0 0 0px 20px;
+      }
+      
+      .method {
+        margin-left: 20px;
+      }
+      
+      .method-notes	{
+      	margin: 10px 0 20px 0;
+      	font-size: 90%;
+      	color: #555;
+      }
+      
+      pre {
+        padding: 10px;
+        margin-bottom: 2px;
+      }
+      
+      .http-method {
+       text-transform: uppercase;
+      }
+      
+      pre.get {
+        background-color: #0f6ab4;
+      }
+      
+      pre.post {
+        background-color: #10a54a;
+      }
+      
+      pre.put {
+        background-color: #c5862b;
+      }
+      
+      pre.delete {
+        background-color: #a41e22;
+      }
+      
+      .huge	{
+      	color: #fff;
+      }
+      
+      pre.example {
+        background-color: #f3f3f3;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      
+      code {
+        white-space: pre;
+      }
+      
+      .nickname {
+        font-weight: bold;
+      }
+      
+      .method-path {
+        font-size: 1.5em;
+        background-color: #0f6ab4;
+      }
+      
+      .up {
+        float:right;
+      }
+      
+      .parameter {
+        width: 500px;
+      }
+      
+      .param {
+        width: 500px;
+        padding: 10px 0 0 20px;
+        font-weight: bold;
+      }
+      
+      .param-desc {
+        width: 700px;
+        padding: 0 0 0 20px;
+        color: #777;
+      }
+      
+      .param-type {
+        font-style: italic;
+      }
+      
+      .param-enum-header {
+      width: 700px;
+      padding: 0 0 0 60px;
+      color: #777;
+      font-weight: bold;
+      }
+      
+      .param-enum {
+      width: 700px;
+      padding: 0 0 0 80px;
+      color: #777;
+      font-style: italic;
+      }
+      
+      .field-label {
+        padding: 0;
+        margin: 0;
+        clear: both;
+      }
+      
+      .field-items	{
+      	padding: 0 0 15px 0;
+      	margin-bottom: 15px;
+      }
+      
+      .return-type {
+        clear: both;
+        padding-bottom: 10px;
+      }
+      
+      .param-header {
+        font-weight: bold;
+      }
+      
+      .method-tags {
+        text-align: right;
+      }
+      
+      .method-tag {
+        background: none repeat scroll 0% 0% #24A600;
+        border-radius: 3px;
+        padding: 2px 10px;
+        margin: 2px;
+        color: #FFF;
+        display: inline-block;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+  <h1>OpenCV Face Recognition</h1>
+    <div class="app-desc"><p>OpenCV Face Recognition allows you to either <strong>manually</strong> (through our <a href="https://developer.opencv.fr">Developer Portal</a> UI) or <strong>programmatically</strong> (through our SDKs or REST API) detect, recognize, and verify faces in images. It is based on state-of-the-art (SOTA) algorithms and uses deep learning face recognition models. The API is designed to be easy to use and integrate into your applications. It is available as this hosted service or you can deploy it yourself on your own servers.</p>
+<p>There are four ways that you can use the product:</p>
+<ul>
+<li>Using the <a href="https://developer.opencv.fr">Face Recognition Developer Portal</a> User Interface to manage your <strong>Developer</strong> teams, <strong>Persons</strong> who are registered for the search API to recognize, and <strong>Collections</strong> - groups of persons.</li>
+<li>Using the <a href="https://docs.opencv.fr/python">Python Face Recognition SDK</a> to integrate the API into your Python applications.</li>
+<li>Using the <a href="https://docs.opencv.fr/cpp">C++ Face Recognition SDK</a> to integrate the API into your C++ applications.</li>
+<li>Using the REST API (below) to integrate the API functionality into your applications in other languages.</li>
+</ul>
+<p>To use the REST API described below, you will need to create an account and obtain an API key. You can do this by signing up for a free account at <a href="https://developer.opencv.fr">Face Recognition Developer Portal</a>.</p>
+<p>Once you have signed up, you will see an <strong>API Developer Key</strong> in the Dashboard. This is the key that you will use to authenticate your requests to the API. You can also create additional Developers (each with their own key) for your applications.</p>
+<p>To use the API, you will need to send the API key in the <code>X-API-Key</code> header of each request. For example, using <code>curl</code>:</p>
+<pre><code>curl -X GET &quot;https://&lt;region&gt;.opencv.fr/persons&quot; -H &quot;accept: application/json&quot; -H &quot;X-API-Key: &lt;your API key&gt;&quot;
+</code></pre>
+<p><code>&lt;region&gt;</code> is the data storage region that you selected when you created your account. It can be <code>us</code>, <code>eu</code>, or <code>sg</code>.</p>
+<p>To help you try out the functionality quickly, the below live docs include a <strong>Try it out</strong> button for each endpoint. This will allow you to send a request to the API and see the response. Before you can use this, you will need to grab your API key from the Dashboard and enter it into the field that shows up when you click the green <strong>Authorize</strong> button (below this line on the right).</p>
+</div>
+    <div class="app-desc">More information: <a href="https://helloreverb.com">https://helloreverb.com</a></div>
+    <div class="app-desc">Contact Info: <a href="hello@helloreverb.com">hello@helloreverb.com</a></div>
+    <div class="app-desc">Version: 2024.10.15.0346</div>
+    
+    <div class="license-info">All rights reserved</div>
+    <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+    <ol>
+      <li>APIKey KeyParamName:x-api-key KeyInQuery:false KeyInHeader:true</li>
+    </ol>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#Collections">Collections</a></h4>
+  <ul>
+  <li><a href="#createCollectionCollectionPost"><code><span class="http-method">post</span> /collection</code></a></li>
+  <li><a href="#deleteCollectionCollectionCollectionIdDelete"><code><span class="http-method">delete</span> /collection/{collection_id}</code></a></li>
+  <li><a href="#getCollectionsCollectionsGet"><code><span class="http-method">get</span> /collections</code></a></li>
+  <li><a href="#updateCollectionCollectionCollectionIdPatch"><code><span class="http-method">patch</span> /collection/{collection_id}</code></a></li>
+  </ul>
+  <h4><a href="#FaceAntiSpoofingLiveness">FaceAntiSpoofingLiveness</a></h4>
+  <ul>
+  <li><a href="#checkLivenessForASingleImageLivenessPost"><code><span class="http-method">post</span> /anti-spoofing</code></a></li>
+  </ul>
+  <h4><a href="#FaceVerification">FaceVerification</a></h4>
+  <ul>
+  <li><a href="#compareTwoListsOfImagesOfSamePersonComparePost"><code><span class="http-method">post</span> /comparison</code></a></li>
+  </ul>
+  <h4><a href="#Persons">Persons</a></h4>
+  <ul>
+  <li><a href="#createPersonPersonPost"><code><span class="http-method">post</span> /person</code></a></li>
+  <li><a href="#deletePersonPersonPersonIdDelete"><code><span class="http-method">delete</span> /person/{person_id}</code></a></li>
+  <li><a href="#getPersonPersonPersonIdGet"><code><span class="http-method">get</span> /person/{person_id}</code></a></li>
+  <li><a href="#getPersonsPersonsGet"><code><span class="http-method">get</span> /persons</code></a></li>
+  <li><a href="#updatePersonPersonPatch"><code><span class="http-method">patch</span> /person/{person_id}</code></a></li>
+  </ul>
+  <h4><a href="#Search">Search</a></h4>
+  <ul>
+  <li><a href="#detectFacesAndOptionallySearchForPersonsDetectPost"><code><span class="http-method">post</span> /detect</code></a></li>
+  <li><a href="#searchFromOneOrMoreImagesOfSamePersonSearchPost"><code><span class="http-method">post</span> /search</code></a></li>
+  </ul>
+
+  <h1><a name="Collections">Collections</a></h1>
+  <div class="method"><a name="createCollectionCollectionPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /collection</code></pre></div>
+    <div class="method-summary">Create Collection (<span class="nickname">createCollectionCollectionPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#CreateCollectionSchema">CreateCollectionSchema</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#CollectionSchema">CollectionSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "name" : "name",
+  "description" : "",
+  "id" : 6,
+  "updated_date" : "2000-01-23T04:56:07.000+00:00",
+  "create_date" : "2000-01-23T04:56:07.000+00:00"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Successful Response
+        <a href="#CollectionSchema">CollectionSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deleteCollectionCollectionCollectionIdDelete"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /collection/{collection_id}</code></pre></div>
+    <div class="method-summary">Delete Collection (<span class="nickname">deleteCollectionCollectionCollectionIdDelete</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">collection_id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#DeletedItemSchema">DeletedItemSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : 0
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#DeletedItemSchema">DeletedItemSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getCollectionsCollectionsGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /collections</code></pre></div>
+    <div class="method-summary">Get Collections (<span class="nickname">getCollectionsCollectionsGet</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ListCollectionSchema">ListCollectionSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "collections" : [ {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  }, {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "count" : 0
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#ListCollectionSchema">ListCollectionSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="updateCollectionCollectionCollectionIdPatch"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="patch"><code class="huge"><span class="http-method">patch</span> /collection/{collection_id}</code></pre></div>
+    <div class="method-summary">Update Collection (<span class="nickname">updateCollectionCollectionCollectionIdPatch</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">collection_id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#UpdateCollectionSchema">UpdateCollectionSchema</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#CollectionSchema">CollectionSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "name" : "name",
+  "description" : "",
+  "id" : 6,
+  "updated_date" : "2000-01-23T04:56:07.000+00:00",
+  "create_date" : "2000-01-23T04:56:07.000+00:00"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#CollectionSchema">CollectionSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="FaceAntiSpoofingLiveness">FaceAntiSpoofingLiveness</a></h1>
+  <div class="method"><a name="checkLivenessForASingleImageLivenessPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /anti-spoofing</code></pre></div>
+    <div class="method-summary">Check Liveness For A Single Image (<span class="nickname">checkLivenessForASingleImageLivenessPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#LivenessSchema">LivenessSchema</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#LivenessResultSchema">LivenessResultSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "is_real" : true,
+  "antispoof_score" : 0.8008281904610115
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#LivenessResultSchema">LivenessResultSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="FaceVerification">FaceVerification</a></h1>
+  <div class="method"><a name="compareTwoListsOfImagesOfSamePersonComparePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /comparison</code></pre></div>
+    <div class="method-summary">Compare Two Lists Of Images Of Same Person (<span class="nickname">compareTwoListsOfImagesOfSamePersonComparePost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#CompareSchema">CompareSchema</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ScoreSchema">ScoreSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "score" : 0.8008281904610115
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#ScoreSchema">ScoreSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Persons">Persons</a></h1>
+  <div class="method"><a name="createPersonPersonPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /person</code></pre></div>
+    <div class="method-summary">Create Person (<span class="nickname">createPersonPersonPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#CreatePersonSchema">CreatePersonSchema</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PersonSchema">PersonSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "images" : [ {
+    "image" : "image",
+    "id" : "id"
+  }, {
+    "image" : "image",
+    "id" : "id"
+  } ],
+  "nationality" : "",
+  "date_of_birth" : "",
+  "name" : "",
+  "id" : 0,
+  "collection" : [ {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  }, {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "create_date" : "2000-01-23T04:56:07.000+00:00",
+  "modified_date" : "2000-01-23T04:56:07.000+00:00"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Successful Response
+        <a href="#PersonSchema">PersonSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deletePersonPersonPersonIdDelete"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /person/{person_id}</code></pre></div>
+    <div class="method-summary">Delete Person (<span class="nickname">deletePersonPersonPersonIdDelete</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">person_id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#DeletedItemSchema">DeletedItemSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : 0
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#DeletedItemSchema">DeletedItemSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getPersonPersonPersonIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /person/{person_id}</code></pre></div>
+    <div class="method-summary">Get Person (<span class="nickname">getPersonPersonPersonIdGet</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">person_id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PersonSchema">PersonSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "images" : [ {
+    "image" : "image",
+    "id" : "id"
+  }, {
+    "image" : "image",
+    "id" : "id"
+  } ],
+  "nationality" : "",
+  "date_of_birth" : "",
+  "name" : "",
+  "id" : 0,
+  "collection" : [ {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  }, {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "create_date" : "2000-01-23T04:56:07.000+00:00",
+  "modified_date" : "2000-01-23T04:56:07.000+00:00"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#PersonSchema">PersonSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getPersonsPersonsGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /persons</code></pre></div>
+    <div class="method-summary">Get Persons (<span class="nickname">getPersonsPersonsGet</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">collection_ids (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>      <div class="param">limit (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  default: 5 </div>      <div class="param">LastID (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ListPersonsSchema">ListPersonsSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "persons" : [ {
+    "images" : [ {
+      "image" : "image",
+      "id" : "id"
+    }, {
+      "image" : "image",
+      "id" : "id"
+    } ],
+    "nationality" : "",
+    "date_of_birth" : "",
+    "name" : "",
+    "id" : 0,
+    "collection" : [ {
+      "name" : "name",
+      "description" : "",
+      "id" : 6,
+      "updated_date" : "2000-01-23T04:56:07.000+00:00",
+      "create_date" : "2000-01-23T04:56:07.000+00:00"
+    }, {
+      "name" : "name",
+      "description" : "",
+      "id" : 6,
+      "updated_date" : "2000-01-23T04:56:07.000+00:00",
+      "create_date" : "2000-01-23T04:56:07.000+00:00"
+    } ],
+    "create_date" : "2000-01-23T04:56:07.000+00:00",
+    "modified_date" : "2000-01-23T04:56:07.000+00:00"
+  }, {
+    "images" : [ {
+      "image" : "image",
+      "id" : "id"
+    }, {
+      "image" : "image",
+      "id" : "id"
+    } ],
+    "nationality" : "",
+    "date_of_birth" : "",
+    "name" : "",
+    "id" : 0,
+    "collection" : [ {
+      "name" : "name",
+      "description" : "",
+      "id" : 6,
+      "updated_date" : "2000-01-23T04:56:07.000+00:00",
+      "create_date" : "2000-01-23T04:56:07.000+00:00"
+    }, {
+      "name" : "name",
+      "description" : "",
+      "id" : 6,
+      "updated_date" : "2000-01-23T04:56:07.000+00:00",
+      "create_date" : "2000-01-23T04:56:07.000+00:00"
+    } ],
+    "create_date" : "2000-01-23T04:56:07.000+00:00",
+    "modified_date" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "count" : 0
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#ListPersonsSchema">ListPersonsSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="updatePersonPersonPatch"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="patch"><code class="huge"><span class="http-method">patch</span> /person/{person_id}</code></pre></div>
+    <div class="method-summary">Update Person (<span class="nickname">updatePersonPersonPatch</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">person_id (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#UpdatePersonSchema">UpdatePersonSchema</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PersonSchema">PersonSchema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "images" : [ {
+    "image" : "image",
+    "id" : "id"
+  }, {
+    "image" : "image",
+    "id" : "id"
+  } ],
+  "nationality" : "",
+  "date_of_birth" : "",
+  "name" : "",
+  "id" : 0,
+  "collection" : [ {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  }, {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "create_date" : "2000-01-23T04:56:07.000+00:00",
+  "modified_date" : "2000-01-23T04:56:07.000+00:00"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        <a href="#PersonSchema">PersonSchema</a>
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Search">Search</a></h1>
+  <div class="method"><a name="detectFacesAndOptionallySearchForPersonsDetectPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /detect</code></pre></div>
+    <div class="method-summary">Detect Faces And Optionally Search For Persons (<span class="nickname">detectFacesAndOptionallySearchForPersonsDetectPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#DetectionRequest">DetectionRequest</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#BBoxSchema">BBoxSchema</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "right_eye" : [ 1, 1 ],
+  "w" : 5,
+  "h" : 0,
+  "left_eye" : [ 6, 6 ],
+  "x" : 5,
+  "y" : 2
+}, {
+  "right_eye" : [ 1, 1 ],
+  "w" : 5,
+  "h" : 0,
+  "left_eye" : [ 6, 6 ],
+  "x" : 5,
+  "y" : 2
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="searchFromOneOrMoreImagesOfSamePersonSearchPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /search</code></pre></div>
+    <div class="method-summary">Search From One Or More Images Of Same Person (<span class="nickname">searchFromOneOrMoreImagesOfSamePersonSearchPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#SearchPersonSchema">SearchPersonSchema</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#SearchPersonResultSchema">SearchPersonResultSchema</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "score" : 0.8008281904610115,
+  "nationality" : "",
+  "collections" : [ {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  }, {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "date_of_birth" : "",
+  "name" : "",
+  "id" : "id",
+  "thumbnails" : [ {
+    "image" : "image",
+    "id" : "id"
+  }, {
+    "image" : "image",
+    "id" : "id"
+  } ],
+  "create_date" : "2000-01-23T04:56:07.000+00:00",
+  "modified_date" : "2000-01-23T04:56:07.000+00:00"
+}, {
+  "score" : 0.8008281904610115,
+  "nationality" : "",
+  "collections" : [ {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  }, {
+    "name" : "name",
+    "description" : "",
+    "id" : 6,
+    "updated_date" : "2000-01-23T04:56:07.000+00:00",
+    "create_date" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "date_of_birth" : "",
+  "name" : "",
+  "id" : "id",
+  "thumbnails" : [ {
+    "image" : "image",
+    "id" : "id"
+  }, {
+    "image" : "image",
+    "id" : "id"
+  } ],
+  "create_date" : "2000-01-23T04:56:07.000+00:00",
+  "modified_date" : "2000-01-23T04:56:07.000+00:00"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Successful Response
+        
+    <h4 class="field-label">422</h4>
+    Validation Error
+        <a href="#HTTPValidationError">HTTPValidationError</a>
+  </div> <!-- method -->
+  <hr/>
+
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#ActionEnum"><code>ActionEnum</code> - ActionEnum</a></li>
+    <li><a href="#BBoxSchema"><code>BBoxSchema</code> - BoundingBoxSchema</a></li>
+    <li><a href="#CollectionSchema"><code>CollectionSchema</code> - CollectionSchema</a></li>
+    <li><a href="#CompareLiveFaceSchema"><code>CompareLiveFaceSchema</code> - CompareLiveFaceSchema</a></li>
+    <li><a href="#CompareSchema"><code>CompareSchema</code> - CompareSchema</a></li>
+    <li><a href="#CreateCollectionSchema"><code>CreateCollectionSchema</code> - CreateCollectionSchema</a></li>
+    <li><a href="#CreateImageResponseSchema"><code>CreateImageResponseSchema</code> - CreateImageResponseSchema</a></li>
+    <li><a href="#CreateImagesSchema"><code>CreateImagesSchema</code> - CreateImagesSchema</a></li>
+    <li><a href="#CreatePersonSchema"><code>CreatePersonSchema</code> - CreatePersonSchema</a></li>
+    <li><a href="#DeletedItemSchema"><code>DeletedItemSchema</code> - DeletedItemSchema</a></li>
+    <li><a href="#DetectionBoxSchema"><code>DetectionBoxSchema</code> - DetectionBoxSchema</a></li>
+    <li><a href="#DetectionLandmarksSchema"><code>DetectionLandmarksSchema</code> - DetectionLandmarksSchema</a></li>
+    <li><a href="#DetectionRequest"><code>DetectionRequest</code> - DetectionRequest</a></li>
+    <li><a href="#DetectionSearchSchema"><code>DetectionSearchSchema</code> - DetectionSearchSchema</a></li>
+    <li><a href="#HTTPValidationError"><code>HTTPValidationError</code> - HTTPValidationError</a></li>
+    <li><a href="#ImagesSchema"><code>ImagesSchema</code> - ImagesSchema</a></li>
+    <li><a href="#ListCollectionSchema"><code>ListCollectionSchema</code> - ListCollectionSchema</a></li>
+    <li><a href="#ListPersonsSchema"><code>ListPersonsSchema</code> - ListPersonsSchema</a></li>
+    <li><a href="#LivenessResultSchema"><code>LivenessResultSchema</code> - LivenessResultSchema</a></li>
+    <li><a href="#LivenessSchema"><code>LivenessSchema</code> - LivenessSchema</a></li>
+    <li><a href="#PersonSchema"><code>PersonSchema</code> - PersonSchema</a></li>
+    <li><a href="#ScoreLiveFaceSchema"><code>ScoreLiveFaceSchema</code> - ScoreLiveFaceSchema</a></li>
+    <li><a href="#ScoreSchema"><code>ScoreSchema</code> - ScoreSchema</a></li>
+    <li><a href="#SearchLiveFaceScheme"><code>SearchLiveFaceScheme</code> - SearchLiveFaceScheme</a></li>
+    <li><a href="#SearchLivePersonResultSchema"><code>SearchLivePersonResultSchema</code> - SearchLivePersonResultSchema</a></li>
+    <li><a href="#SearchModeEnum"><code>SearchModeEnum</code> - SearchModeEnum</a></li>
+    <li><a href="#SearchPersonResultSchema"><code>SearchPersonResultSchema</code> - SearchPersonResultSchema</a></li>
+    <li><a href="#SearchPersonSchema"><code>SearchPersonSchema</code> - SearchPersonSchema</a></li>
+    <li><a href="#UpdateCollectionSchema"><code>UpdateCollectionSchema</code> - UpdateCollectionSchema</a></li>
+    <li><a href="#UpdatePersonSchema"><code>UpdatePersonSchema</code> - UpdatePersonSchema</a></li>
+    <li><a href="#ValidationError"><code>ValidationError</code> - ValidationError</a></li>
+    <li><a href="#VerifyPersonSchema"><code>VerifyPersonSchema</code> - VerifyPersonSchema</a></li>
+  </ol>
+
+  <div class="model">
+    <h3><a name="ActionEnum"><code>ActionEnum</code> - ActionEnum</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+          </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="BBoxSchema"><code>BBoxSchema</code> - BoundingBoxSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">h (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">left_eye (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">right_eye (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">w (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">x (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">y (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CollectionSchema"><code>CollectionSchema</code> - CollectionSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">create_date </div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">updated_date </div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CompareLiveFaceSchema"><code>CompareLiveFaceSchema</code> - CompareLiveFaceSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">probe </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">gallery </div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+<div class="param">search_mode (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+              <a href="#SearchModeEnum"><code>SearchModeEnum</code></a>&nbsp;&nbsp;&nbsp;
+      </div>
+<div class="param">liveness_min_score (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CompareSchema"><code>CompareSchema</code> - CompareSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">image1 </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">image2 </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CreateCollectionSchema"><code>CreateCollectionSchema</code> - CreateCollectionSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CreateImageResponseSchema"><code>CreateImageResponseSchema</code> - CreateImageResponseSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">person_id </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">thumbnail </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CreateImagesSchema"><code>CreateImagesSchema</code> - CreateImagesSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">person_id </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">images </div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CreatePersonSchema"><code>CreatePersonSchema</code> - CreatePersonSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">images </div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+<div class="param">date_of_birth (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">nationality (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">collection_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DeletedItemSchema"><code>DeletedItemSchema</code> - DeletedItemSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DetectionBoxSchema"><code>DetectionBoxSchema</code> - DetectionBoxSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">left </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">top </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">right </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">bottom </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DetectionLandmarksSchema"><code>DetectionLandmarksSchema</code> - DetectionLandmarksSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">left_eye </div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">right_eye </div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">nose </div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">left_mouth </div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">right_mouth </div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DetectionRequest"><code>DetectionRequest</code> - DetectionRequest</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">image </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DetectionSearchSchema"><code>DetectionSearchSchema</code> - DetectionSearchSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">collection_ids (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">max_results (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">min_score (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">search_mode (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+              <a href="#SearchModeEnum"><code>SearchModeEnum</code></a>&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="HTTPValidationError"><code>HTTPValidationError</code> - HTTPValidationError</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">detail (optional)</div><div class="param-desc"><span class="param-type"><a href="#ValidationError">array[ValidationError]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ImagesSchema"><code>ImagesSchema</code> - ImagesSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">image (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ListCollectionSchema"><code>ListCollectionSchema</code> - ListCollectionSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">count </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">collections </div><div class="param-desc"><span class="param-type"><a href="#CollectionSchema">array[CollectionSchema]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ListPersonsSchema"><code>ListPersonsSchema</code> - ListPersonsSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">count </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">persons </div><div class="param-desc"><span class="param-type"><a href="#PersonSchema">array[PersonSchema]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="LivenessResultSchema"><code>LivenessResultSchema</code> - LivenessResultSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">is_real (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">antispoof_score (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="LivenessSchema"><code>LivenessSchema</code> - LivenessSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">image </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="PersonSchema"><code>PersonSchema</code> - PersonSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">images (optional)</div><div class="param-desc"><span class="param-type"><a href="#ImagesSchema">array[ImagesSchema]</a></span>  </div>
+<div class="param">date_of_birth (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">nationality (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">collection </div><div class="param-desc"><span class="param-type"><a href="#CollectionSchema">array[CollectionSchema]</a></span>  </div>
+<div class="param">create_date </div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">modified_date </div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ScoreLiveFaceSchema"><code>ScoreLiveFaceSchema</code> - ScoreLiveFaceSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">score </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+<div class="param">liveness_score </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ScoreSchema"><code>ScoreSchema</code> - ScoreSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">score </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="SearchLiveFaceScheme"><code>SearchLiveFaceScheme</code> - SearchLiveFaceScheme</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">image </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">collection_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">min_score (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">max_results (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">search_mode (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+              <a href="#SearchModeEnum"><code>SearchModeEnum</code></a>&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="SearchLivePersonResultSchema"><code>SearchLivePersonResultSchema</code> - SearchLivePersonResultSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">liveness_score </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+<div class="param">persons </div><div class="param-desc"><span class="param-type"><a href="#SearchPersonResultSchema">array[SearchPersonResultSchema]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="SearchModeEnum"><code>SearchModeEnum</code> - SearchModeEnum</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+          </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="SearchPersonResultSchema"><code>SearchPersonResultSchema</code> - SearchPersonResultSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">thumbnails (optional)</div><div class="param-desc"><span class="param-type"><a href="#ImagesSchema">array[ImagesSchema]</a></span>  </div>
+<div class="param">date_of_birth (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">nationality (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">create_date </div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">modified_date </div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">score </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+<div class="param">collections </div><div class="param-desc"><span class="param-type"><a href="#CollectionSchema">array[CollectionSchema]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="SearchPersonSchema"><code>SearchPersonSchema</code> - SearchPersonSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">collection_ids (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">image </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">max_results (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">min_score (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">search_mode (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+              <a href="#SearchModeEnum"><code>SearchModeEnum</code></a>&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="UpdateCollectionSchema"><code>UpdateCollectionSchema</code> - UpdateCollectionSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="UpdatePersonSchema"><code>UpdatePersonSchema</code> - UpdatePersonSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">new_images (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">removed_image_ids (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">array[Integer]</a></span>  </div>
+<div class="param">date_of_birth (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">nationality (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">old_collection_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+<div class="param">collection (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ValidationError"><code>ValidationError</code> - ValidationError</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">loc </div><div class="param-desc"><span class="param-type"><a href="#">array[null]</a></span>  </div>
+              <div class="param-desc"><span class="param-type">items anyOf:</span>
+              </div>
+<div class="param">msg </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="VerifyPersonSchema"><code>VerifyPersonSchema</code> - VerifyPersonSchema</a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">images </div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+<div class="param">min_score (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+      </div>
+<div class="param">verification_mode (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+      <div class="param-desc"><span class="param-type">anyOf:</span>
+              <a href="#SearchModeEnum"><code>SearchModeEnum</code></a>&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>
